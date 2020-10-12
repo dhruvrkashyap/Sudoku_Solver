@@ -4,6 +4,11 @@
 #include<fstream>
 using namespace std;
 
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
+
 int find_0(char arr[][9],int &i,int &j)                //find an empty element represented by - 
 {
 	for(int k=0;k<9;k++)
@@ -342,14 +347,16 @@ int main()
 	while(n!='p')
     {
 		cout<<"Instructions:\n";
-    	cout<<"\tW\tmoves upwards\n\tS\tmoves downwards\n";
-    	cout<<"\tA\tmoves left\n\tD\tmoves right\n";
-    	cout<<"\tE\tenter a digit\n\tP\tsolve sudoku\n";
+    	cout<<"\tArrow key Up\tmoves upwards\n\tArrow key Down\tmoves downwards\n";
+    	cout<<"\tArrow key Left\tmoves left\n\tArrow key Right\tmoves right\n";
+    	cout<<"\tE\tenter a digit\n\tS\tsolve sudoku\n";
 		n=getch();
+		if(!(n=='S' || n=='s' || n=='e' || n=='E'))
+			n=getch();
     	switch(n)
     	{
-			case 'w':
-			case 'W':									//moves the cursor upwards
+			case KEY_UP:
+			//case 'W':									//moves the cursor upwards
 			{  
 				if(i==0)
 				{
@@ -379,8 +386,8 @@ int main()
 				break;  				
 			}
 				   
-		    case 's':
-		    case 'S':									//moves the cursor downwards
+		    case KEY_DOWN:
+		    //case 'S':									//moves the cursor downwards
 		    {
 		    	if(i==8)
 				{
@@ -410,8 +417,8 @@ int main()
 				break;
 			}
 			
-			case 'd':
-			case 'D':									//moves the cursor to left
+			case KEY_RIGHT:
+			//case 'D':									//moves the cursor to left
 			{
 				if(j==8 && i==8)						//cursor is at bottom right 
 				{
@@ -458,8 +465,8 @@ int main()
 				break;
 			}
 			
-			case 'a':
-			case 'A':									//moves the cursor to right
+			case KEY_LEFT:
+			//case 'A':									//moves the cursor to right
 			{  
 				if(j==0 && i==0)						//cursor is at top left 
 				{
@@ -584,42 +591,24 @@ int main()
 				break;	
 			}
 			
-			case 'p':  
-			case 'P':                                 //solves the sudoku by calling solve_sudoku() 
+			case 's':  
+			case 'S':                                 //solves the sudoku by calling solve_sudoku() 
 			{
 				if(input_sol_or_game==2)
 				{
 					arr[i][j]=(char)196;
-					int c=0;
-					for(int x=0;x<9;x++)
-					{
-						for(int v=0;v<9;v++)
-						{
-							if(arr[x][v]!=(char)196)
-								c++;				  //count number of elements in the sudoku
-						}
-					}
 					
-					if(c>=17)
+					if(solve_sudoku(arr)==1)
 					{
-						if(solve_sudoku(arr)==1)
-						{
-							system("cls");
-							cout<<"\t\tSolved Sudoku\n";
-							print(arr);
-							system("pause");
-							exit(1);
-						}
-						else
-						{
-							arr[i][j]=(char)254;
-							n='x';
-						}
+						system("cls");
+						cout<<"\t\tSolved Sudoku\n";
+						print(arr);
+						system("pause");
+						exit(1);
 					}
 					else
 					{
 						arr[i][j]=(char)254;
-						flag_min17=1;
 						n='x';
 					}
 				}
@@ -652,11 +641,6 @@ int main()
 		
 		}
 		system("cls");
-		if(flag_min17==1)
-		{
-			cout<<"\tThe minimum input to solve a sudoku is 17. Please enter more input\n";
-			flag_min17=0;
-		}
 		print(arr);
 	}
 	system("pause");  	
